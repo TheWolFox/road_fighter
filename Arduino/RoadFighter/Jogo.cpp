@@ -206,9 +206,9 @@ void Jogo::inicializarFase()
       break;
     }
     
-    Inimigo inim = new Inimigo(px, py, vx, vy, ATRASO*id, DANO*id, id);
+    Inimigo *inim = new Inimigo(px, py, vx, vy, ATRASO*id, DANO*id, id);
     
-    if(!colisaoInimigos(&inim)){
+    if(!colisaoInimigos(inim)){
         inimigos.push_back(inim);
         i++;
     }else{
@@ -218,7 +218,7 @@ void Jogo::inicializarFase()
 
 }
 
-bool colisaoInimigos(Inimigo *pInimigo){
+bool Jogo::colisaoInimigos(Inimigo *pInimigo){
 
   for(int i = 0; i < inimigos.size(); i++){
     if(pInimigo->colide(inimigos[i]))
@@ -285,8 +285,8 @@ void Jogo::atualizar()
     // Carrinho zigzag muda direção em x apos colidir.
   
   for (int i = 0; i < inimigos.size(); i++){
-    if (inimigos[i]->getComprimento != 2){
-      if (colisaoInimigos(&inimigos[i]))
+    if (inimigos[i]->getComprimento() != 2){
+      if (colisaoInimigos(inimigos[i]))
         inimigos[i]->setVY(0.0);
     } else {
       
@@ -387,7 +387,7 @@ void Jogo::desalocarElementos()
 
   // Desalocar os inimigos
   /* -- Tem que ser iterator?? -- */
-  for/( int i = 0; i < inimigos.size(); i++ )
+  for( int i = 0; i < inimigos.size(); i++ )
     desalocarInimigo(inimigos[i]);
   inimigos.clear();
 }
@@ -400,4 +400,3 @@ void Jogo::desalocarInimigo(Inimigo *pInimigo)
     pInimigo = NULL;
   }
 }
-

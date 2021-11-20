@@ -18,10 +18,10 @@ public:
 
     float getDanoTempo() { return this->danoTempo; }
     float getDanoPonto() { return this->danoPonto; }
-    int getID() {return this->id;
+    int getID() { return this->id; }
 
-    bool colideX(Inimigo* inimigo)
-    bool colideY(Inimigo* inimigo)
+    bool colideX(Inimigo* inimigo);
+    bool colideY(Inimigo* inimigo);
     bool colide(Inimigo* inimigo);
 };
 
