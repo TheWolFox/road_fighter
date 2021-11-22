@@ -181,7 +181,7 @@ void Jogo::inicializarFase()
   /* esta parte deve funcionar, se funcionar, dá pra colocar no atualizar */
   int i = 0;
   while (i < qntdInimigos) {
-    int id = (int) random(1, 4);
+    int id = 1; //(int) random(1, 4);
     float px = (float) random(1, 7); // no código do Arduíno ele usa long
     float py = (float) random(0, 13);
 
@@ -300,15 +300,15 @@ void Jogo::atualizar()
       switch (inimigos[i]->getComprimento())
       {
         case 1:
-          inimigos[i]->setVY(V_CARRO_COMUM);
+          inimigos[i]->setVY(V_CARRO_COMUM * pJogador->getVY());
           inimigos[i]->setVX(0.0);
           break;
         case 2:
-          inimigos[i]->setVY(V_CARRO_ZIGZAG);
+          inimigos[i]->setVY(V_CARRO_ZIGZAG * pJogador->getVY());
           inimigos[i]->setVX(V_CAMINHAO);
           break;
         case 3:
-          inimigos[i]->setVY(V_CAMINHAO);
+          inimigos[i]->setVY(V_CAMINHAO * pJogador->getVY());
           inimigos[i]->setVX(0.0);
           break;
         default:
@@ -328,7 +328,7 @@ void Jogo::atualizar()
       pJogador->somaPontuacao(-(inimigos[i]->getDanoPonto()));
       this->tempoDaFase -= inimigos[i]->getDanoTempo();
     }
-    
+
     // Mover inimigos
     inimigos[i]->mover(inimigos[i]->getVX() *  dt, inimigos[i]->getVY() * dt);
 
@@ -336,7 +336,7 @@ void Jogo::atualizar()
     if (inimigos[i]->getY() > 15) {
       delete inimigos[i];
       inimigos[i] = NULL;
-      inimigos.erase(inimigos.begin()+i);
+      inimigos.erase(inimigos.begin() + i);
     }
   }
 
@@ -345,12 +345,10 @@ void Jogo::atualizar()
   // Acender os leds de cada corpo
   matrizLED.led(15, pJogador->getX(), HIGH);
   for (int i = 0; i < inimigos.size(); i++) {
-    for (int j = inimigos[i]->getY(); j < inimigos[i]->getY() + inimigos[i]->getComprimento(); j++) {
+    for (int j = inimigos[i]->getY(); j < inimigos[i]->getY() + inimigos[i]->getComprimento()-1 ; j++) {
       matrizLED.led(j, inimigos[i]->getX(), HIGH);
     }
   }
-
-
   /**/
 }
 

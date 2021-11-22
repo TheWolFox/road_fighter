@@ -15,7 +15,7 @@
 #define V_CAMINHAO  0.5 // Led por seg.
 
 #define VX_JOGADOR 2.0 // Led por seg.
-#define VY_JOGADOR 2.0 // Led por seg.
+#define VY_JOGADOR 1.5 // Led por seg.
 
 #define QNTDINIMIGOS 5
 #define DANO 10.0
