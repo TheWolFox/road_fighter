@@ -20,9 +20,6 @@ public:
     float getDanoPonto() { return this->danoPonto; }
     int getID() { return this->id; }
 
-    bool colideX(Inimigo* inimigo);
-    bool colideY(Inimigo* inimigo);
-    bool colide(Inimigo* inimigo);
 };
 
 #endif

@@ -16,3 +16,17 @@ void Veiculo::mover(float dx, float dy)
   this->x += dx;
   this->y += dy;
 }
+
+bool Veiculo::colide(Veiculo* inimigo)
+{
+
+    if( this->x != inimigo->getX() ) return false;
+
+    for(float i = this->y; i < this->y + this->comprimento; i++){
+        for(float j = inimigo->getY(); j < inimigo->getY() + inimigo->getComprimento(); j++)
+            if(i == j)
+                return true;
+    }
+    
+    return false;
+}

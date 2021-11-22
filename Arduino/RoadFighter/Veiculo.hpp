@@ -27,6 +27,7 @@ class Veiculo
     float getVX() {return vx;}
     float getVY() {return vy;}
     int getComprimento() {return comprimento;}
+    virtual bool colide(Veiculo* inimigo);
 };
 
 #endif

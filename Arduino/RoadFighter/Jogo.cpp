@@ -208,7 +208,7 @@ void Jogo::inicializarFase()
     
     Inimigo *inim = new Inimigo(px, py, vx, vy, ATRASO*id, DANO*id, id);
     
-    if(!colisaoInimigos(inim)){
+    if(!colisaoInimigos(inim, i)){
         inimigos.push_back(inim);
         i++;
     }else{
@@ -218,10 +218,10 @@ void Jogo::inicializarFase()
 
 }
 
-bool Jogo::colisaoInimigos(Inimigo *pInimigo){
+bool Jogo::colisaoInimigos(Inimigo *pInimigo, int j){
 
   for(int i = 0; i < inimigos.size(); i++){
-    if(pInimigo->colide(inimigos[i]))
+    if(pInimigo->colide(inimigos[i]) && i != j)
       return true;
   }
 
@@ -265,8 +265,13 @@ void Jogo::atualizar()
   tempoDaFase -= dt;
   pJogador->somaPontuacao(dt * PONTO_POR_SEG * pJogador->getVY()); // Conforme a velocidade do Jogador
 
-  // Apagar os leds de cada corpo (FALTA DOS INIMIGOS)
+  // Apagar os leds de cada corpo
   matrizLED.led(15, pJogador->getX(), LOW);
+  for(int i = 0; i < inimigos.size(); i++){
+    for(int j = inimigos[i]->getY(); j < inimigos[i]->getY() + inimigos[i]->getComprimento(); j++){
+      matrizLED.led(j, inimigos[i]->getX(), LOW);
+    }
+  }
 
   // Verifica colisão jogador com parede
   if ( pJogador->getX() + pJogador->getVX() * dt <= pPista->getXi() + 1  ||
@@ -274,38 +279,68 @@ void Jogo::atualizar()
   {
     // Seta a velocidade em X do jogador como 0.0 Led/seg
     pJogador->setVX(0.0);
+    
+    // Colidiu com a parede se ferrou c;
+    pJogador->somaPontuacao(-10.0);
+    this->tempoDaFase -= ATRASO;
   }
 
   // Move o personagem
   pJogador->mover(pJogador->getVX() *  dt, pJogador->getVY() * dt);
 
-  // Seta velocidade de inimigos (FALTA IMPLEMENTAR)
-
-  // Verifica colisão dos inimigos com a parede (Falta implementar)
-    // Carrinho zigzag muda direção em x apos colidir.
-  
-  for (int i = 0; i < inimigos.size(); i++){
-    if (inimigos[i]->getComprimento() != 2){
-      if (colisaoInimigos(inimigos[i]))
-        inimigos[i]->setVY(0.0);
-    } else {
-      
-    }
-  }
-
+  // Verifica colisão dos inimigos com a parede
   // Verifica colisão com os outros inimigos. Se colidir, seta velocidade vy como 0. se não, pode se mover.
-
-  // Verifica colisão com o player
-
-  // Verifica se inimigo saiu da tela
-
-  /* Remoção do inimigo
-    desalocarInimigo(inimigos[i]);
-    inimigos.erase(i);
-  */
-
-  // Acender os leds de cada corpo (Falta os inimigos)
-  /* */
+  for (int i = 0; i < inimigos.size(); i++){
+    if (colisaoInimigos(inimigos[i], i)){
+        inimigos[i]->setVY(0.0);
+        inimigos[i]->setVX(0.0);
+    } 
+    // Seta velocidade de inimigos
+    else {
+      switch (inimigos[i]->getComprimento())
+    {
+    case 1:
+      inimigos[i]->setVY(V_CARRO_COMUM);
+      inimigos[i]->setVX(0.0)
+      break;
+    case 2:
+      inimigos[i]->setVY(V_CARRO_ZIGZAG);
+      inimigos[i]->setVX(V_CAMINHAO);
+      break;
+    case 3:
+      inimigos[i]->setVY(V_CAMINHAO);
+      inimigos[i]->setVX(0.0)
+      break;
+    default:
+      break;
+    }
+    }
+    if (inimigos[i]->getComprimento() == 2 && 
+       (inimigos[i]->getX() + inimigos[i]->getVX() * dt == pPista->getXi() + 1 || 
+        inimigos[i]->getX() + inimigos[i]->getVX() * dt == pPista->getXf()))
+    {
+      // Carrinho zigzag muda direção em x apos colidir.
+      inimigos[i]->setVX(inimigos[i]->getVX()*(-1));
+    }
+    // Verifica colisão com o player
+    if (pPlayer->colide(inimigos[i]))
+    {
+      pPlayer->somaPontuacao(-(inimigos[i]->getDanoPonto()));
+      this->tempoDaFase -= inimigos[i]->getDanoTempo();
+    }
+    // Verifica se inimigo saiu da tela e deleta ele
+    if (inimigos[i]->getY() > 15){
+      delete inimigos[i];
+      inimigos[i] = NULL;
+      inimigos.erase(i);
+    }
+    // Mover inimigos
+    inimigos[i]->mover(inimigos[i]->getVX() *  dt, inimigos[i]->getVY() * dt)
+  }
+  
+  /* Gerador de Inimigos (FALTA IMPLEMENTAR) */
+  
+  // Acender os leds de cada corpo
   matrizLED.led(15, pJogador->getX(), HIGH);
   for(int i = 0; i < inimigos.size(); i++){
     for(int j = inimigos[i]->getY(); j < inimigos[i]->getY() + inimigos[i]->getComprimento(); j++){
@@ -313,9 +348,8 @@ void Jogo::atualizar()
     }
   }
   
-  /*
   
-  */
+  /**/
 }
 
 /* Renderiza o texto no Display LCD */
