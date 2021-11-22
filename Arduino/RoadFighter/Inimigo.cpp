@@ -12,9 +12,3 @@ Inimigo::~Inimigo()
 {
 
 }
-
-bool Inimigo::colideX(Inimigo* inimigo)
-{
-    
-}
-

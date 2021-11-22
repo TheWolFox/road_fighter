@@ -163,7 +163,7 @@ void Jogo::inicializarFase()
 
   // Definicao dos atributos da fase
   tempoDaFase = 30.0;
-  pPista = new Pista(0,7);
+  pPista = new Pista(0, 7);
 
   qntdInimigos = QNTDINIMIGOS * dificuldade;
   spawn = TEMPO_SPAWN / dificuldade;
@@ -173,55 +173,55 @@ void Jogo::inicializarFase()
 
   // Inicializacao da pista
   inicializarPista();
-  
+
   // Alocacao do jogador
   pJogador = new Jogador(0.0, 0.0, 0.0, 0.0);
   inicializarJogador();
-  
+
   /* esta parte deve funcionar, se funcionar, dá pra colocar no atualizar */
   int i = 0;
-  while(i < qntdInimigos){
-    int id = (int) random(1,4);
-    float px = (float) random(1,7); // no código do Arduíno ele usa long
-    float py = (float) random(0,13);
+  while (i < qntdInimigos) {
+    int id = (int) random(1, 4);
+    float px = (float) random(1, 7); // no código do Arduíno ele usa long
+    float py = (float) random(0, 13);
 
     float vy = 0;
     float vx = 0;
-    
+
     switch (id)
     {
-    case 1:
-      vy = V_CARRO_COMUM;
-      vx = 0;
-      break;
-    case 2:
-      vy = V_CARRO_ZIGZAG;
-      vx = V_CAMINHAO;
-      break;
-    case 3:
-      vy = V_CAMINHAO;
-      vx = 0;
-      break;
-    default:
-      break;
+      case 1:
+        vy = V_CARRO_COMUM;
+        vx = 0;
+        break;
+      case 2:
+        vy = V_CARRO_ZIGZAG;
+        vx = V_CAMINHAO;
+        break;
+      case 3:
+        vy = V_CAMINHAO;
+        vx = 0;
+        break;
+      default:
+        break;
     }
-    
-    Inimigo *inim = new Inimigo(px, py, vx, vy, ATRASO*id, DANO*id, id);
-    
-    if(!colisaoInimigos(inim, i)){
-        inimigos.push_back(inim);
-        i++;
-    }else{
+
+    Inimigo *inim = new Inimigo(px, py, vx, vy, ATRASO * id, DANO * id, id);
+
+    if (!colisaoInimigos(inim, i)) {
+      inimigos.push_back(inim);
+      i++;
+    } else {
       delete inim;
     }
   }
 
 }
 
-bool Jogo::colisaoInimigos(Inimigo *pInimigo, int j){
+bool Jogo::colisaoInimigos(Inimigo *pInimigo, int j) {
 
-  for(int i = 0; i < inimigos.size(); i++){
-    if(pInimigo->colide(inimigos[i]) && i != j)
+  for (int i = 0; i < inimigos.size(); i++) {
+    if (pInimigo->colide(inimigos[i]) && i != j)
       return true;
   }
 
@@ -233,29 +233,29 @@ void Jogo::capturarEntrada()
   // Seta velocidade X do Jogador
   switch (joystick.eixoX())
   {
-  case -1:
-    pJogador->setVX(-1.0 * VX_JOGADOR);
-    break;
-  case 1:
-    pJogador->setVX( 1.0 * VX_JOGADOR);
-    break;
-  default:
-    pJogador->setVX( 0.0 * VX_JOGADOR);
-    break;
+    case -1:
+      pJogador->setVX(-1.0 * VX_JOGADOR);
+      break;
+    case 1:
+      pJogador->setVX( 1.0 * VX_JOGADOR);
+      break;
+    default:
+      pJogador->setVX( 0.0 * VX_JOGADOR);
+      break;
   }
 
   // Seta velocidade Y do Jogador
   switch (joystick.eixoY())
   {
-  case -1:
-    pJogador->setVY(1.0 * VY_JOGADOR);
-    break;
-  case 1:
-    pJogador->setVY(3.0 * VY_JOGADOR);
-    break;
-  default:
-    pJogador->setVY(2.0 * VY_JOGADOR);
-    break;
+    case -1:
+      pJogador->setVY(1.0 * VY_JOGADOR);
+      break;
+    case 1:
+      pJogador->setVY(3.0 * VY_JOGADOR);
+      break;
+    default:
+      pJogador->setVY(2.0 * VY_JOGADOR);
+      break;
   }
 }
 
@@ -267,8 +267,8 @@ void Jogo::atualizar()
 
   // Apagar os leds de cada corpo
   matrizLED.led(15, pJogador->getX(), LOW);
-  for(int i = 0; i < inimigos.size(); i++){
-    for(int j = inimigos[i]->getY(); j < inimigos[i]->getY() + inimigos[i]->getComprimento(); j++){
+  for (int i = 0; i < inimigos.size(); i++) {
+    for (int j = inimigos[i]->getY(); j < inimigos[i]->getY() + inimigos[i]->getComprimento(); j++) {
       matrizLED.led(j, inimigos[i]->getX(), LOW);
     }
   }
@@ -279,7 +279,7 @@ void Jogo::atualizar()
   {
     // Seta a velocidade em X do jogador como 0.0 Led/seg
     pJogador->setVX(0.0);
-    
+
     // Colidiu com a parede se ferrou c;
     pJogador->somaPontuacao(-10.0);
     this->tempoDaFase -= ATRASO;
@@ -290,65 +290,67 @@ void Jogo::atualizar()
 
   // Verifica colisão dos inimigos com a parede
   // Verifica colisão com os outros inimigos. Se colidir, seta velocidade vy como 0. se não, pode se mover.
-  for (int i = 0; i < inimigos.size(); i++){
-    if (colisaoInimigos(inimigos[i], i)){
-        inimigos[i]->setVY(0.0);
-        inimigos[i]->setVX(0.0);
-    } 
+  for (int i = 0; i < inimigos.size(); i++) {
+    if (colisaoInimigos(inimigos[i], i)) {
+      inimigos[i]->setVY(0.0);
+      inimigos[i]->setVX(0.0);
+    }
     // Seta velocidade de inimigos
     else {
       switch (inimigos[i]->getComprimento())
-    {
-    case 1:
-      inimigos[i]->setVY(V_CARRO_COMUM);
-      inimigos[i]->setVX(0.0)
-      break;
-    case 2:
-      inimigos[i]->setVY(V_CARRO_ZIGZAG);
-      inimigos[i]->setVX(V_CAMINHAO);
-      break;
-    case 3:
-      inimigos[i]->setVY(V_CAMINHAO);
-      inimigos[i]->setVX(0.0)
-      break;
-    default:
-      break;
+      {
+        case 1:
+          inimigos[i]->setVY(V_CARRO_COMUM);
+          inimigos[i]->setVX(0.0);
+          break;
+        case 2:
+          inimigos[i]->setVY(V_CARRO_ZIGZAG);
+          inimigos[i]->setVX(V_CAMINHAO);
+          break;
+        case 3:
+          inimigos[i]->setVY(V_CAMINHAO);
+          inimigos[i]->setVX(0.0);
+          break;
+        default:
+          break;
+      }
     }
-    }
-    if (inimigos[i]->getComprimento() == 2 && 
-       (inimigos[i]->getX() + inimigos[i]->getVX() * dt == pPista->getXi() + 1 || 
-        inimigos[i]->getX() + inimigos[i]->getVX() * dt == pPista->getXf()))
+    if (inimigos[i]->getComprimento() == 2 &&
+        (inimigos[i]->getX() + inimigos[i]->getVX() * dt == pPista->getXi() + 1 ||
+         inimigos[i]->getX() + inimigos[i]->getVX() * dt == pPista->getXf()))
     {
       // Carrinho zigzag muda direção em x apos colidir.
-      inimigos[i]->setVX(inimigos[i]->getVX()*(-1));
+      inimigos[i]->setVX(inimigos[i]->getVX() * (-1));
     }
     // Verifica colisão com o player
-    if (pPlayer->colide(inimigos[i]))
+    if (pJogador->colide(inimigos[i]))
     {
-      pPlayer->somaPontuacao(-(inimigos[i]->getDanoPonto()));
+      pJogador->somaPontuacao(-(inimigos[i]->getDanoPonto()));
       this->tempoDaFase -= inimigos[i]->getDanoTempo();
     }
+    
+    // Mover inimigos
+    inimigos[i]->mover(inimigos[i]->getVX() *  dt, inimigos[i]->getVY() * dt);
+
     // Verifica se inimigo saiu da tela e deleta ele
-    if (inimigos[i]->getY() > 15){
+    if (inimigos[i]->getY() > 15) {
       delete inimigos[i];
       inimigos[i] = NULL;
-      inimigos.erase(i);
+      inimigos.erase(inimigos.begin()+i);
     }
-    // Mover inimigos
-    inimigos[i]->mover(inimigos[i]->getVX() *  dt, inimigos[i]->getVY() * dt)
   }
-  
+
   /* Gerador de Inimigos (FALTA IMPLEMENTAR) */
-  
+
   // Acender os leds de cada corpo
   matrizLED.led(15, pJogador->getX(), HIGH);
-  for(int i = 0; i < inimigos.size(); i++){
-    for(int j = inimigos[i]->getY(); j < inimigos[i]->getY() + inimigos[i]->getComprimento(); j++){
+  for (int i = 0; i < inimigos.size(); i++) {
+    for (int j = inimigos[i]->getY(); j < inimigos[i]->getY() + inimigos[i]->getComprimento(); j++) {
       matrizLED.led(j, inimigos[i]->getX(), HIGH);
     }
   }
-  
-  
+
+
   /**/
 }
 
@@ -378,7 +380,7 @@ void Jogo::acoesDerrota()
 
 void Jogo::inicializarPista()
 {
-  if(pPista == NULL) {
+  if (pPista == NULL) {
     // Mensagem de erro
     displayLCD.imprimeCentralizado("Err pista=NULL", 0);
     displayLCD.imprimeCentralizado("inicializaFase()", 1);
@@ -409,26 +411,26 @@ void Jogo::inicializarJogador()
 
 void Jogo::desalocarElementos()
 {
-  if(pJogador){
+  if (pJogador) {
     delete(pJogador);
     pJogador = NULL;
   }
 
-  if(pPista) {
+  if (pPista) {
     delete(pPista);
     pPista = NULL;
   }
 
   // Desalocar os inimigos
   /* -- Tem que ser iterator?? -- */
-  for( int i = 0; i < inimigos.size(); i++ )
+  for ( int i = 0; i < inimigos.size(); i++ )
     desalocarInimigo(inimigos[i]);
   inimigos.clear();
 }
 
 void Jogo::desalocarInimigo(Inimigo *pInimigo)
 {
-  if(pInimigo)
+  if (pInimigo)
   {
     delete(pInimigo);
     pInimigo = NULL;
