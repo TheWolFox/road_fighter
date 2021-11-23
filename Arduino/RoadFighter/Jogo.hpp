@@ -24,7 +24,7 @@ class Jogo
     float dt; // Tempo de tick do loop do jogo
     int qntdInimigos; // Variável de controle de inimigos
     float spawn; // Controle de tempo de spawn de inimigos
-    float percorrido;
+    int count;
 
     DisplayLCD displayLCD;
     Joystick joystick;
@@ -55,6 +55,7 @@ class Jogo
     void desalocarElementos(); // desaloca os ponteiros do Jogo
     void desalocarInimigo(Inimigo *pInimigo); // Funcao para desalocar inimigo
 
+    void geradorInimigos()
     bool colisaoInimigos(Inimigo *pInimigo, int j); // Verifica a colisão de um veículo com a lista de inimigos
 
 };

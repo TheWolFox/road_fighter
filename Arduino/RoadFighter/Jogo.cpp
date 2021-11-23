@@ -9,6 +9,8 @@ Jogo::Jogo()
   dt = 0.0;
   pJogador = NULL;
   pPista = NULL;
+  count = 0;
+  spawn = 0.0;
 }
 
 Jogo::~Jogo()
@@ -315,12 +317,13 @@ void Jogo::atualizar()
           break;
       }
     }
-    if (inimigos[i]->getComprimento() == 2 &&
-        (inimigos[i]->getX() + inimigos[i]->getVX() * dt == pPista->getXi() + 1 ||
-         inimigos[i]->getX() + inimigos[i]->getVX() * dt == pPista->getXf()))
+    if (inimigos[i]->getX() + inimigos[i]->getVX() * dt <= pPista->getXi() + 1 ||
+        inimigos[i]->getX() + inimigos[i]->getVX() * dt >= pPista->getXf())
     {
       // Carrinho zigzag muda direção em x apos colidir.
-      inimigos[i]->setVX(inimigos[i]->getVX() * (-1));
+      if (inimigos[i]->getComprimento() == 2)
+        inimigos[i]->setVX(inimigos[i]->getVX() * (-1));
+      else inimigos[i]->setVX(0.0);
     }
     // Verifica colisão com o player
     if (pJogador->colide(inimigos[i]))
@@ -336,20 +339,84 @@ void Jogo::atualizar()
     if (inimigos[i]->getY() > 15) {
       delete inimigos[i];
       inimigos[i] = NULL;
-      inimigos.erase(inimigos.begin() + i);
     }
   }
 
-  /* Gerador de Inimigos (FALTA IMPLEMENTAR) */
+  /* Gerador de Inimigos */
+  if (spawn <= 0){
+    if (inimigos.size() < qntdInimigos){
+      geradorInimigos();
+      spawn = TEMPO_SPAWN/dificuldade;
+    }
+  } else spawn = spawn - dt;
+
 
   // Acender os leds de cada corpo
   matrizLED.led(15, pJogador->getX(), HIGH);
   for (int i = 0; i < inimigos.size(); i++) {
-    for (int j = inimigos[i]->getY(); j < inimigos[i]->getY() + inimigos[i]->getComprimento()-1 ; j++) {
-      matrizLED.led(j, inimigos[i]->getX(), HIGH);
+    if(inimigo[i] != NULL){
+      for (int j = inimigos[i]->getY(); j < (inimigos[i]->getY()) + (inimigos[i]->getComprimento()); j++) {
+        matrizLED.led(j, inimigos[i]->getX(), HIGH);
+      }
     }
   }
-  /**/
+
+  /* Remoção dos Inimigos do vetor */
+  for (int i = 0; i < inimigos.size(); i++){
+    if (inimigo[i] == NULL)
+      inimigos.erase(inimigos.begin() + i);
+  }
+
+  /* Linha de Chegada */
+  if ((pJogador->getY() + 15) >= pPista->getComprimento()){
+    matrizLED.ledIntervalo(count, count, 1, 6, 1);
+    count++;
+  }
+}
+
+void Jogo::geradorInimigos(){
+
+  int i = 0;
+  int max = inimigos.size();
+  float px, py, vy, vx;
+  
+  while (max < this->qntdInimigos && i < 1) {
+    int id = 1; //(int) random(1, 4);
+    px = (float) random(1, 7); // no código do Arduíno ele usa long
+    py = -3.0;
+
+    vy = 0;
+    vx = 0;
+
+    switch (id)
+    {
+      case 1:
+        vy = V_CARRO_COMUM;
+        vx = 0;
+        break;
+      case 2:
+        vy = V_CARRO_ZIGZAG;
+        vx = V_CAMINHAO;
+        break;
+      case 3:
+        vy = V_CAMINHAO;
+        vx = 0;
+        break;
+      default:
+        break;
+    }
+
+    Inimigo *inim = new Inimigo(px, py, vx, vy, ATRASO * id, DANO * id, id);
+
+    if (!colisaoInimigos(inim, -1)) {
+      inimigos.push_back(inim);
+      i++;
+    } else {
+      delete inim;
+    }
+    
+  }
+
 }
 
 /* Renderiza o texto no Display LCD */
