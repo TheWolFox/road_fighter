@@ -354,7 +354,7 @@ void Jogo::atualizar()
   // Acender os leds de cada corpo
   matrizLED.led(15, pJogador->getX(), HIGH);
   for (int i = 0; i < inimigos.size(); i++) {
-    if(inimigo[i] != NULL){
+    if(inimigos[i] != NULL){
       for (int j = inimigos[i]->getY(); j < (inimigos[i]->getY()) + (inimigos[i]->getComprimento()); j++) {
         matrizLED.led(j, inimigos[i]->getX(), HIGH);
       }
@@ -363,7 +363,7 @@ void Jogo::atualizar()
 
   /* Remoção dos Inimigos do vetor */
   for (int i = 0; i < inimigos.size(); i++){
-    if (inimigo[i] == NULL)
+    if (inimigos[i] == NULL)
       inimigos.erase(inimigos.begin() + i);
   }
 

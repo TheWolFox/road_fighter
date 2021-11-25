@@ -55,7 +55,7 @@ class Jogo
     void desalocarElementos(); // desaloca os ponteiros do Jogo
     void desalocarInimigo(Inimigo *pInimigo); // Funcao para desalocar inimigo
 
-    void geradorInimigos()
+    void geradorInimigos();
     bool colisaoInimigos(Inimigo *pInimigo, int j); // Verifica a colisão de um veículo com a lista de inimigos
 
 };
