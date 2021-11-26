@@ -7,8 +7,8 @@
 #define DISP_LINHAS 2
 #define DISP_COLUNAS 16
 #define DISP_ENDERECO 0x27 //Endereço do display para o módulo I2C
-// P_SDA A4
-// P_SCL A5
+// P_SDA (SCL - UNO R3 - Perto das portas digitais)
+// P_SCL (SCL - UNO R3 - Perto das portas digitais)
 
 class DisplayLCD:
   public LiquidCrystal_I2C

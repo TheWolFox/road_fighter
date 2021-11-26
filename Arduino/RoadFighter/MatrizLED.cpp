@@ -1,7 +1,7 @@
 #include "MatrizLED.hpp"
 
 MatrizLED::MatrizLED():
-  MD_MAX72XX(MD_MAX72XX::GENERIC_HW, P_DATA, P_CLK, P_CS, N_MODULOS)
+  MD_MAX72XX(MD_MAX72XX::GENERIC_HW, P_DIN, P_CLK, P_CS, N_MODULOS)
 {
   //Constantes estão no arquivo Cabecalho.hpp
 }
