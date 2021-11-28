@@ -4,9 +4,9 @@
 #include "Cabecalho.hpp"
 #include <MD_MAX72xx.h>
 
-#define P_CLK 11
-#define P_CS 12
-#define P_DIN 13
+#define P_CLK 10
+#define P_CS 11
+#define P_DIN 12
 #define N_MODULOS 2
 
 class MatrizLED :

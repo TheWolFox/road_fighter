@@ -10,9 +10,9 @@
 #include "Inimigo.hpp"
 
 // LEDS
-#define P_LED_G 5
-#define P_LED_Y 4
-#define P_LED_R 3
+#define P_LED_G 8
+#define P_LED_Y 7
+#define P_LED_R 6
 
 class Jogo
 {
