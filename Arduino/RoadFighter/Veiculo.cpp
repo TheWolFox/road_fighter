@@ -1,7 +1,7 @@
 #include "Veiculo.hpp"
 
-Veiculo::Veiculo(float xi, float yi, float vxi, float vyi, int comprimento) :
-  x(xi), y(yi), vx(vxi), vy(vyi), comprimento(comprimento)
+Veiculo::Veiculo(float xi, float yi, int comprimento) :
+  x(xi), y(yi), vx(0.0), vy(0.0), comprimento(comprimento)
 {
 
 }
@@ -11,8 +11,8 @@ Veiculo::~Veiculo()
 
 }
 
-void Veiculo::mover(float dx, float dy)
+void Veiculo::mover(float dt)
 {
-  this->x += dx;
-  this->y += dy;
+  this->x += this->vx * dt;
+  this->y += this->vy * dt;
 }

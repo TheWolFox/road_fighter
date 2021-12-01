@@ -3,6 +3,9 @@
 
 #include "Cabecalho.hpp"
 #include <MD_MAX72xx.h>
+#include "Inimigo.hpp"
+#include "Jogador.hpp"
+#include "Pista.hpp"
 
 #define P_CLK 10
 #define P_CS 11
@@ -19,8 +22,10 @@ class MatrizLED :
     void Setup();
 
     void led(int linha, int coluna, int ligado); //0 -> Desligado, != 0 -> Ligado
-    void todosLeds(int ligado); //0-> apagar todos, != -> Ligar todos
-    void ledIntervalo(int li, int lf, int ci, int cf, int ligado); // li: Linha inicial, lf: Linha final, ci: Coluna inicial, cf: Coluna final, ligado: 0 -> Desligado ou != 0 -> Ligado.
+    void todosLeds(int ligado);
+    void ledInimigo(Inimigo *pInimigo, int ligado);
+    void ledJogador(Jogador *pJogador, int ligado);
+    void ledPista(Pista *pPista, int ligado);
 };
 
 #endif

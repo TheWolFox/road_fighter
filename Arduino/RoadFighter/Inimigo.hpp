@@ -2,6 +2,7 @@
 #define H_INIMIGO
 
 #include "Cabecalho.hpp"
+#include "Jogador.hpp"
 #include "Veiculo.hpp"
 
 class Inimigo :
@@ -10,16 +11,13 @@ class Inimigo :
 protected:
     float danoTempo; // Dano em segundos.
     float danoPonto; // Dano na pontuacao do jogador.
-    int id; // 1: CarroComum, 2: CarroZigZag, 3: Caminhao
 
 public:
-    Inimigo(float xi, float yi, float vxi, float vyi, float danoTempo, float danoPonto, int comprimento);
+    Inimigo(float xi = 3.0, int comprimento = 1);
     ~Inimigo();
 
-    float getDanoTempo() { return this->danoTempo; }
-    float getDanoPonto() { return this->danoPonto; }
-    int getID() { return this->id; }
-
+    bool verificarColisao(Jogador *pJogador); // Colisao com o jogador depois de se movimentarem(Retorna true se colidir)
+    void verificarColisao(Pista *pPista, float dt) override; // Colisão com a pista
 };
 
 #endif

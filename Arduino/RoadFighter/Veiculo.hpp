@@ -13,11 +13,11 @@ class Veiculo
     int comprimento;
 
   public:
-    Veiculo(float xi = 3.0, float yi = 0.0, float vxi = 0.0, float vyi = 0.0, int comprimento = 1);
+    Veiculo(float xi = 3.0, float yi = 0.0, int comprimento = 1);
     ~Veiculo();
 
-    void mover(float dx, float dy);
-    virtual bool colidir(Pista *pista, float dt) = 0; // Colisão com a pista
+    void mover(float dt); // Move-se de acordo com o tempo
+    virtual void verificarColisao(Pista *pPista, float dt) = 0; // Colisão com a pista
     
     // Sets
     void setX(float x) {this->x = x;}
