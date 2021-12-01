@@ -13,7 +13,7 @@ class Veiculo
     int comprimento;
 
   public:
-    Veiculo(float xi, float yi, float vxi, float vyi, int comprimento);
+    Veiculo(float xi = 7.0, float yi = 0.0, float vxi = 0.0, float vyi = 0.0, int comprimento = 1);
     ~Veiculo();
 
     void mover(float dx, float dy);
