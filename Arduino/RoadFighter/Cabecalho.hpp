@@ -11,7 +11,7 @@
 #define VX_INIMIGO 2.0 // Led por seg.
 #define VY_INIMIGO 1.0 // Led por seg.
 #define DANO_PONTUACAO 10.0 // Dano de colisão com o jogador
-#define DANO_TEMPO 1.0 // Dano 
+#define DANO_TEMPO 2.0 // Dano 
 
 #define VX_JOGADOR 3.0 // Led por seg.
 #define VY_JOGADOR 1.5 // Led por seg.

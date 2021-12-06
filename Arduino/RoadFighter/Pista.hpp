@@ -12,6 +12,8 @@ public:
     Pista(int xi = 0, int xf = 7, int comprimento = 50);
     ~Pista();
 
+    int setXi(int xi) {this->xi = xi;}
+    int setXf(int xf) {this->xf = xf;}
     int getXi() {return this->xi;}
     int getXf() {return this->xf;}
     int getComprimento(){ return this->comprimento; }

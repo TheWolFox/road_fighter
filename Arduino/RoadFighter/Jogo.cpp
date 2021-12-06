@@ -24,9 +24,6 @@ void Jogo::resetar()
 {
   jogador.resetar();
   inimigos.clear();
-  tempoDeSpawn = TEMPO_SPAWN;
-  dt = 0.0;
-  dificuldade = 1;
   fimDaFase = false;
   vitoria = false;
 }
@@ -162,9 +159,40 @@ void Jogo::inicializarFase()
   // Inicializacao das variaveis de controle
   this->resetar();
   matrizLED.todosLeds(LOW);
-  qntMaxInimigos = QNT_MAX_INIMIGOS * dificuldade;
-  
-  tempoDeSpawn = TEMPO_SPAWN / dificuldade;
+
+  switch (dificuldade)
+  {
+    case 1:
+      qntMaxInimigos = QNT_MAX_INIMIGOS * dificuldade;
+      tempoPadraoSpawn = TEMPO_SPAWN / dificuldade;
+      vxInimigos = 1.0; // VX_INIMIGO;
+      vyInimigos = 1.0; // VY_INIMIGO;
+      pista.setXi(0);
+      pista.setXf(7);
+      jogador.setTempoRestante(30.0);
+      break;
+
+    case 2:
+      qntMaxInimigos = QNT_MAX_INIMIGOS * dificuldade;
+      tempoPadraoSpawn = TEMPO_SPAWN / dificuldade;
+      vxInimigos = 1.0; //VX_INIMIGO;
+      vyInimigos = 2.0; //VY_INIMIGO + 2;
+      pista.setXi(1);
+      pista.setXf(7);
+      jogador.setTempoRestante(15.0);
+      break;
+
+    default:
+      qntMaxInimigos = QNT_MAX_INIMIGOS * dificuldade;
+      tempoPadraoSpawn = TEMPO_SPAWN / dificuldade;
+      vxInimigos = 1.5; //VX_INIMIGO;
+      vyInimigos = 2.5; //VY_INIMIGO;
+      pista.setXi(1);
+      pista.setXf(6);
+      jogador.setTempoRestante(20.0);
+      break;
+  }
+  tempoDeSpawn = tempoPadraoSpawn;
 
   // Cria o primeiro inimigos
   gerarInimigo();
@@ -209,15 +237,15 @@ void Jogo::capturarEntrada()
   for (int i = 0; i < inimigos.size(); i++)
   {
     // Seta VY
-    inimigos[i].setVY(jogador.getVY() * VY_INIMIGO);
-    
+    inimigos[i].setVY(jogador.getVY() * vyInimigos);
+
     // Seta VX se for zig zag
     if (inimigos[i].getComprimento() == 2) {
-      if(inimigos[i].getVX() < 0.0) {
-        inimigos[i].setVX(-VX_INIMIGO);
+      if (inimigos[i].getVX() < 0.0) {
+        inimigos[i].setVX(-vxInimigos);
       }
       else {
-        inimigos[i].setVX(VX_INIMIGO);
+        inimigos[i].setVX(vxInimigos);
       }
     }
     else {
@@ -232,7 +260,7 @@ void Jogo::atualizar()
   jogador.verificarColisao(&pista, dt);
 
   // Verifica se ocorrea colisao dos inimigos com a parede
-  for(int i = 0; i < inimigos.size(); i++) {
+  for (int i = 0; i < inimigos.size(); i++) {
     inimigos[i].verificarColisao(&pista, dt);
   }
 
@@ -246,7 +274,7 @@ void Jogo::atualizar()
     inimigos[i].mover(dt);
 
     // Verifica se o inimigo saiu da tela ou colidiu com o jogador
-    if(inimigos[i].getY() > 15.0 || inimigos[i].verificarColisao(&jogador)) {
+    if (inimigos[i].getY() > 15.0 || inimigos[i].verificarColisao(&jogador)) {
       inimigos.erase(inimigos.begin() + i);
       i--;
     }
@@ -262,7 +290,7 @@ void Jogo::atualizar()
   // Verifica se insere novo inimigo
   if (tempoDeSpawn < 0.0 && inimigos.size() < qntMaxInimigos) {
     gerarInimigo();
-    tempoDeSpawn += (float)( TEMPO_SPAWN / dificuldade);
+    tempoDeSpawn = tempoPadraoSpawn;
   }
   else {
     tempoDeSpawn -= dt;

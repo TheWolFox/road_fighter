@@ -22,7 +22,10 @@ class Jogo
     bool vitoria; // Variável de controle da vitória do jogador
     float dt; // Tempo de tick do loop do jogo
     int qntMaxInimigos; // Variável de controle de inimigos
+    float vxInimigos; // Variável de controle da velocidade em X dos inimigos
+    float vyInimigos; // Veriável de controle da velocidade em Y dos inimigos
     float tempoDeSpawn; // Controle de tempo de spawn de inimigos
+    float tempoPadraoSpawn; // Variável com o tempo de spawn padrão
 
     DisplayLCD displayLCD;
     Joystick joystick;
