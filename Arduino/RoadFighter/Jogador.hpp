@@ -19,7 +19,7 @@ class Jogador :
 
     void resetar(); // Reseta o player com os valores padrões
     void verificarColisao(Pista *pPista, float dt) override; // Colisão com a pista
-    void atualizar(float dt); // Atualiza variaveis conforme o dt
+    void atualizar(float dt, int dificuldade); // Atualiza variaveis conforme o dt
     
     void setPontuacao(float pontuacao); // Seta pontuacao do jogador
     float getPontuacao() { return this->pontuacao; } // Retorna a pontuacao do Jogador

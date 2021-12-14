@@ -285,7 +285,7 @@ void Jogo::atualizar()
   matrizLED.ledJogador(&jogador, HIGH);
 
   // Atualiza o Jogador
-  jogador.atualizar(dt);
+  jogador.atualizar(dt, dificuldade);
 
   // Verifica se insere novo inimigo
   if (tempoDeSpawn < 0.0 && inimigos.size() < qntMaxInimigos) {
@@ -313,7 +313,7 @@ void Jogo::acoesVitoria()
 {
   // Sequencia de ações que vão ocorrer com a vitória do jogador
   String pontos;
-  pontos.concat(jogador.getPontuacao());
+  pontos.concat(jogador.getPontuacao() + jogador.getTempoRestante());
   displayLCD.imprimeCentralizado("Vitoria!", 0);
   displayLCD.imprimeCentralizado("Pontos: " + pontos, 1);
 }
@@ -322,7 +322,7 @@ void Jogo::acoesDerrota()
 {
   // Sequencia de ações que vão ocorrer com a derrota do jogador
   String pontos;
-  pontos.concat(jogador.getPontuacao());
+  pontos.concat(jogador.getPontuacao() + jogador.getTempoRestante());
   displayLCD.imprimeCentralizado("Derrota!", 0);
   displayLCD.imprimeCentralizado("Pontos: " + pontos, 1);
 }

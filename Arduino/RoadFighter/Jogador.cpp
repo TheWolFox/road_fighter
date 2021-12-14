@@ -32,10 +32,10 @@ void Jogador::verificarColisao(Pista *pPista, float dt)
   }
 }
 
-void Jogador::atualizar(float dt)
+void Jogador::atualizar(float dt, int dificuldade)
 {
   this->diminuirTempoRestante(dt);
-  this->somarPontuacao(dt * PONTO_POR_SEG * this->vy);
+  this->somarPontuacao(dt * PONTO_POR_SEG * this->vy * dificuldade);
 }
 
 void Jogador::setPontuacao(float pontuacao)
